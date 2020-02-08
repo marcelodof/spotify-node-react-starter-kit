@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
-
 import SpotifyWebApi from 'spotify-web-api-js';
 import PlaylistList from './components/PlaylistList';
 const spotifyApi = new SpotifyWebApi();
@@ -14,8 +12,13 @@ class App extends Component {
       spotifyApi.setAccessToken(token);
     }
     this.state = {
-      loggedIn: token ? true : false
+      loggedIn: token ? true : false,
+      playlist: {}
     }
+  }
+
+  setPlaylist(playlist) {
+    this.setState({playlist});
   }
 
   getHashParams() {
@@ -32,9 +35,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div>
         <a href='http://localhost:8888' > Login to Spotify </a>
-        <PlaylistList spotifyApi={spotifyApi}/>
+        <PlaylistList setPlaylist={this.setPlaylist.bind(this)}/>
+        <p>Choosen playlist: {this.state.playlist.name}</p>
       </div>
     );
   }

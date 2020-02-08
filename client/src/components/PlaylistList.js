@@ -1,4 +1,6 @@
 import React from 'react';
+import SpotifyWebApi from 'spotify-web-api-js';
+const spotifyApi = new SpotifyWebApi();
 
 class PlaylistList extends React.Component {
   state = {
@@ -10,7 +12,7 @@ class PlaylistList extends React.Component {
   }
 
   getMyPlaylist(){
-    this.props.spotifyApi.getUserPlaylists({ limit: 50 })
+    spotifyApi.getUserPlaylists({ limit: 50 })
       .then((response) => {
         const playlistArray = []
         response.items.forEach(element => {
@@ -27,10 +29,23 @@ class PlaylistList extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id='playlist-list'>
         <ul>
           {this.state.myPlaylist.map((element, index) => (
-            <li key={index}> {element.name} </li>
+            <li 
+              key={index}
+              className='playlist-grid'
+              onClick={() => this.props.setPlaylist(element)}>
+              {element.images.map((img, index) => {
+                if (index === 0) {
+                  return <img src={img.url} alt='' 
+                    style={{width: 50, height: 50}}/> 
+                }
+              })}
+              <p>
+                {element.name}
+              </p>
+            </li>
           ))}
         </ul>
       </div>
